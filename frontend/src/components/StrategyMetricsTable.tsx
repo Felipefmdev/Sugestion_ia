@@ -1,7 +1,6 @@
-// src/StrategyMetricsTable.tsx
+// src/components/StrategyMetricsTable.tsx
 
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 
 interface StrategyMetric {
   strategy_name: string;
@@ -9,32 +8,18 @@ interface StrategyMetric {
   success_count: number;
 }
 
-// O tipo SortKey agora inclui 'strategy_name'
 type SortKey = 'strategy_name' | 'activation_count' | 'success_count' | 'success_rate';
 
-const StrategyMetricsTable: React.FC = () => {
-  const [metrics, setMetrics] = useState<StrategyMetric[]>([]);
-  const [loading, setLoading] = useState(true);
+interface StrategyMetricsTableProps {
+  metrics: StrategyMetric[];
+}
+
+const StrategyMetricsTable: React.FC<StrategyMetricsTableProps> = ({ metrics }) => {
   const [sortKey, setSortKey] = useState<SortKey>('success_rate');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
-  useEffect(() => {
-    const fetchMetrics = async () => {
-      try {
-        const response = await axios.get<StrategyMetric[]>('http://localhost:3000/api/strategy-metrics');
-        setMetrics(response.data);
-      } catch (err) {
-        console.error('Erro ao buscar as métricas:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMetrics();
-    const intervalId = setInterval(fetchMetrics, 5000);
-    return () => clearInterval(intervalId);
-  }, []);
-
   const sortedMetrics = React.useMemo(() => {
+    if (!metrics || metrics.length === 0) return [];
     const sorted = [...metrics].sort((a, b) => {
       let aValue: number | string;
       let bValue: number | string;
@@ -77,10 +62,6 @@ const StrategyMetricsTable: React.FC = () => {
     }
     return '';
   };
-
-  if (loading) {
-    return <div className="metrics-table-container">Carregando métricas...</div>;
-  }
 
   if (metrics.length === 0) {
     return <div className="metrics-table-container">Nenhuma estratégia foi ativada ainda.</div>;

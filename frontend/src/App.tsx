@@ -6,6 +6,7 @@ import { supabase } from './config/supabaseClient';
 import LoginPage from './components/LoginPage';
 import ResultsChart from './components/ResultsChart';
 import StrategyMetricsTable from './components/StrategyMetricsTable';
+import StrategyCreator from './components/StrategyCreator';
 import './App.css';
 
 interface User {
@@ -63,6 +64,7 @@ function App() {
 
 const AppContent: React.FC<{ session: Session }> = ({ session }) => {
   const [suggestion, setSuggestion] = useState<SuggestionResponse | null>(null);
+  const [metrics, setMetrics] = useState<any[]>([]);
   const [history, setHistory] = useState<GameHistory[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -74,11 +76,16 @@ const AppContent: React.FC<{ session: Session }> = ({ session }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [suggestionResponse, historyResponse] = await Promise.all([
-          axios.get<SuggestionResponse>('http://localhost:3000/api/ai-suggestion'),
+        const token = session.access_token;
+        const headers = { Authorization: `Bearer ${token}` };
+
+        const [userDataResponse, historyResponse] = await Promise.all([
+          axios.get('http://localhost:3000/api/user-data', { headers }),
           axios.get<GameHistory[]>('http://localhost:3000/api/game-history')
         ]);
-        setSuggestion(suggestionResponse.data);
+        
+        setSuggestion(userDataResponse.data.suggestion);
+        setMetrics(userDataResponse.data.metrics);
         setHistory(historyResponse.data);
       } catch (err) {
         console.error("Erro ao buscar dados do backend:", err);
@@ -91,7 +98,7 @@ const AppContent: React.FC<{ session: Session }> = ({ session }) => {
     fetchData();
     const intervalId = setInterval(fetchData, 5000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [session]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -129,46 +136,52 @@ const AppContent: React.FC<{ session: Session }> = ({ session }) => {
         <p>Logado como: {session?.user?.email}</p>
         <button onClick={handleLogout} className="logout-button">Sair</button>
       </header>
-      <main>
-        <section className="suggestion-section card">
-          <h2>Sugestão da IA</h2>
-          {suggestion && (
-            <>
-              <p><strong>Sugestão:</strong> <span style={{ color: getOutcomeColor(suggestion.suggestion), fontWeight: 'bold' }}>{getSuggestionText(suggestion.suggestion)}</span></p>
-              <p><strong>Estratégia Ativada:</strong> {suggestion.analysis}</p>
-              <div className="last-games-ai">
-                {suggestion.last_games?.map((game, index) => (
-                  <div key={index} className="game-bubble-small" style={{ backgroundColor: getOutcomeColor(game.outcome) }}></div>
-                ))}
-              </div>
-            </>
-          )}
-        </section>
+      <main className="multi-user-layout">
+        <div className="dashboard-left">
+            <section className="suggestion-section card">
+                <h2>Sugestão da IA</h2>
+                {suggestion && (
+                    <>
+                        <p><strong>Sugestão:</strong> <span style={{ color: getOutcomeColor(suggestion.suggestion), fontWeight: 'bold' }}>{getSuggestionText(suggestion.suggestion)}</span></p>
+                        <p><strong>Estratégia Ativada:</strong> {suggestion.analysis}</p>
+                        <div className="last-games-ai">
+                            {suggestion.last_games?.map((game, index) => (
+                                <div key={index} className="game-bubble-small" style={{ backgroundColor: getOutcomeColor(game.outcome) }}></div>
+                            ))}
+                            <span className="arrow">→</span>
+                        </div>
+                    </>
+                )}
+            </section>
+            <section className="chart-section card">
+                <h2>Distribuição dos Resultados</h2>
+                <div className="chart-container">
+                    <ResultsChart playerWins={playerWins} bankerWins={bankerWins} ties={ties} />
+                </div>
+            </section>
+        </div>
         
-        <section className="metrics-section card">
-            <StrategyMetricsTable />
-        </section>
-        
-        <section className="chart-section card">
-          <h2>Distribuição dos Resultados</h2>
-          <div className="chart-container">
-            <ResultsChart playerWins={playerWins} bankerWins={bankerWins} ties={ties} />
-          </div>
-        </section>
-
-        <section className="history-section card">
-          <h2>Últimos Jogos</h2>
-          <div className="history-list-compact">
-            {history.map(game => (
-              <div key={game.id} className="game-bubble-item">
-                <div className="game-bubble" style={{ backgroundColor: getOutcomeColor(game.outcome) }}></div>
-                <span className="game-bubble-label">
-                  {game.outcome.replace('Won', '').replace('Player', 'Azul').replace('Banker', 'Vermelho').replace('Tie', 'Empate')}
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
+        <div className="dashboard-right">
+            <section className="strategy-creator-card card">
+                <StrategyCreator session={session} />
+            </section>
+            <section className="metrics-section card">
+                <StrategyMetricsTable metrics={metrics} />
+            </section>
+            <section className="history-section card">
+                <h2>Últimos Jogos</h2>
+                <div className="history-list-compact">
+                    {history.map(game => (
+                        <div key={game.id} className="game-bubble-item">
+                            <div className="game-bubble" style={{ backgroundColor: getOutcomeColor(game.outcome) }}></div>
+                            <span className="game-bubble-label">
+                                {game.outcome.replace('Won', '').replace('Player', 'Azul').replace('Banker', 'Vermelho').replace('Tie', 'Empate')}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            </section>
+        </div>
       </main>
     </div>
   );

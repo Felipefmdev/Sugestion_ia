@@ -1,128 +1,119 @@
-/* ======== Reset ======== */
+/* src/App.css */
+
+/* Reset básico e estilos globais */
 html, body, #root {
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Segoe UI', Roboto, sans-serif;
 }
 
 body {
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  color: #f8fafc;
+  font-family: Arial, sans-serif;
+  background-color: #1a1a1a;
+  color: #f0f0f0;
 }
 
-/* ======== Telas de carregamento e erro ======== */
 .loading-screen, .error-screen {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  font-size: 1.6rem;
-  font-weight: 500;
-}
-
-.loading-screen {
-  color: #38bdf8;
+  font-size: 1.5rem;
+  color: #61dafb;
 }
 
 .error-screen {
-  color: #ef4444;
+  color: #dc3545;
 }
 
-/* ======== Estrutura principal ======== */
 .App {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* ======== Cabeçalho ======== */
 .App-header {
   width: 100%;
   padding: 20px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid #444;
   margin-bottom: 30px;
   text-align: center;
 }
 
 .App-header h1 {
+  color: #61dafb;
   font-size: 2.5rem;
-  font-weight: 700;
-  color: #38bdf8;
   margin: 0;
 }
 
 .logout-button {
-  background: linear-gradient(90deg, #ef4444, #dc2626);
+  background-color: #dc3545;
   color: white;
   border: none;
-  padding: 8px 18px;
-  border-radius: 6px;
+  padding: 8px 16px;
+  border-radius: 4px;
   cursor: pointer;
   margin-top: 10px;
   font-size: 1rem;
-  transition: all 0.3s ease;
 }
 
-.logout-button:hover {
-  transform: scale(1.05);
-  background: linear-gradient(90deg, #f87171, #dc2626);
-}
-
-/* ======== Layout ======== */
+/* Layout multiusuário */
 main {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   gap: 20px;
   width: 100%;
   max-width: 1400px;
+  flex-grow: 1;
 }
 
-/* ======== Card ======== */
+.dashboard-left, .dashboard-right {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
 .card {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(10px);
-  border-radius: 14px;
+  background-color: #282c34;
+  border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-  flex: 1 1 45%;
-  max-width: 600px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   min-height: 250px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 28px rgba(0,0,0,0.35);
 }
 
 h2 {
-  color: #38bdf8;
-  margin-bottom: 1rem;
+  color: #61dafb;
+  margin: 0 0 1rem 0;
   font-size: 1.5rem;
 }
 
-/* ======== Sugestão da IA ======== */
-.suggestion-section p {
-  margin: 5px 0;
-  text-align: center;
-  font-size: 1.1rem;
+.chart-container {
+  max-width: 350px;
+  margin: 0 auto;
 }
 
-/* Bolinhas e seta */
+/* Sugestão da IA */
+.suggestion-section {
+    text-align: center;
+}
+
+.suggestion-section p {
+    margin: 5px 0;
+}
+
 .last-games-ai {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   margin-top: 10px;
   position: relative;
 }
@@ -132,9 +123,9 @@ h2 {
   color: #f0f0f0;
   font-size: 1.5rem;
   position: absolute;
-  bottom: -22px; /* um pouco abaixo das bolinhas */
-  left: 0; /* alinhada à primeira */
-  transform: translateX(4px); /* ajuste fino */
+  left: 50%;
+  top: 50%;
+  transform: translate(50px, -50%);
 }
 
 .game-bubble-small {
@@ -144,53 +135,46 @@ h2 {
   border: 1px solid #333;
 }
 
-/* ======== Histórico de Jogos ======== */
+/* Histórico de Jogos */
+.history-section {
+    flex-grow: 1;
+}
+
 .history-list-compact {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-  gap: 12px;
-  justify-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
 }
 
 .game-bubble-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  text-align: center;
 }
 
 .game-bubble {
-  width: 26px;
-  height: 26px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
-  border: none;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.game-bubble:hover {
-  transform: scale(1.15);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  border: 2px solid #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .game-bubble-label {
-  font-size: 0.8rem;
-  color: #e2e8f0;
+  color: #f0f0f0;
 }
 
-/* Cores bolinhas */
-.game-bubble.blue {
-  background: linear-gradient(145deg, #38bdf8, #0284c7);
+/* Tabela de Métricas */
+.metrics-table-container {
+  width: 100%;
 }
 
-.game-bubble.red {
-  background: linear-gradient(145deg, #ef4444, #b91c1c);
-}
-
-.game-bubble.orange {
-  background: linear-gradient(145deg, #f59e0b, #b45309);
-}
-
-/* ======== Tabela ======== */
 .metrics-table-container table {
   width: 100%;
   border-collapse: collapse;
@@ -198,45 +182,106 @@ h2 {
 
 .metrics-table-container th,
 .metrics-table-container td {
-  border: 1px solid rgba(255,255,255,0.1);
-  padding: 10px;
+  border: 1px solid #444;
+  padding: 12px;
+  text-align: left;
 }
 
 .metrics-table-container th {
-  background-color: rgba(56, 189, 248, 0.1);
-  color: #38bdf8;
+  background-color: #333;
+  color: #61dafb;
   font-weight: bold;
+  cursor: pointer;
+}
+
+.metrics-table-container th.sortable {
+  cursor: pointer;
 }
 
 .metrics-table-container tbody tr:nth-child(even) {
-  background-color: rgba(255,255,255,0.02);
+  background-color: #2a2a2a;
 }
 
 .metrics-table-container tbody tr:hover {
-  background-color: rgba(255,255,255,0.05);
+  background-color: #444;
 }
 
-/* ======== Login ======== */
+.metrics-table-container th:nth-child(2),
+.metrics-table-container td:nth-child(2),
+.metrics-table-container th:nth-child(3),
+.metrics-table-container td:nth-child(3),
+.metrics-table-container th:nth-child(4),
+.metrics-table-container td:nth-child(4) {
+    text-align: center;
+}
+
+/* Criador de Estratégias */
+.strategy-creator-container {
+    padding: 20px;
+}
+
+.strategy-creator-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.strategy-creator-container input[type="text"] {
+    padding: 10px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #333;
+    color: #f0f0f0;
+}
+
+.color-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.color-buttons button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+}
+
+.current-pattern-display {
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    border: 1px dashed #444;
+    padding: 10px;
+    border-radius: 4px;
+    min-height: 40px;
+}
+
+/* Estilos de login e redefinição de senha */
 .login-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  width: 100%;
 }
 
 .login-form {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(8px);
+  background-color: #282c34;
   padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   text-align: center;
   width: 100%;
   max-width: 400px;
+  display: flex;
+  flex-direction: column;
 }
 
 .login-form h2 {
-  color: #38bdf8;
+  color: #61dafb;
   margin-bottom: 24px;
 }
 
@@ -244,65 +289,75 @@ h2 {
   width: 100%;
   padding: 12px;
   margin-bottom: 16px;
-  border: none;
-  background-color: rgba(255,255,255,0.05);
-  color: #f8fafc;
-  border-radius: 6px;
+  border: 1px solid #444;
+  background-color: #333;
+  color: #f0f0f0;
+  border-radius: 4px;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .login-form button {
+  flex-grow: 1;
   padding: 12px;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 1em;
   font-weight: bold;
   cursor: pointer;
-  background: linear-gradient(90deg, #38bdf8, #0ea5e9);
-  color: #0f172a;
-  transition: all 0.3s ease;
+  background-color: #61dafb;
+  color: #282c34;
+  transition: background-color 0.2s;
 }
 
-.login-form button:hover {
-  transform: translateY(-2px);
-  background: linear-gradient(90deg, #0ea5e9, #0284c7);
+.login-form button:hover:not(:disabled) {
+  background-color: #21a1f1;
+}
+
+.login-form button:disabled {
+  background-color: #444;
+  cursor: not-allowed;
+}
+
+.message {
+  margin-top: 16px;
+  color: #f0f0f0;
 }
 
 .forgot-password-link {
-  cursor: pointer;
-  text-decoration: underline;
-  color: #38bdf8;
-  font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #61dafb;
+    font-size: 0.9rem;
+    margin-top: 10px;
 }
 
 .back-button {
-  background: none !important;
-  border: none !important;
-  color: #38bdf8;
-  text-decoration: underline;
+    background-color: transparent !important;
+    border: none !important;
+    color: #61dafb;
+    text-decoration: underline;
+    margin-top: 10px;
 }
 
-/* ======== Responsividade ======== */
 @media (max-width: 768px) {
   .App-header h1 {
-    font-size: 1.8rem;
+    font-size: 2rem;
   }
   main {
     flex-direction: column;
-    align-items: center;
   }
   .card {
     flex: 1 1 100%;
     max-width: none;
   }
   .last-games-ai::after {
-    bottom: -20px;
-    transform: translateX(0);
+    display: none;
   }
-}
-
-.chart-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 400px; /* altura fixa */
 }

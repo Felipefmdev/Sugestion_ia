@@ -4,7 +4,6 @@ import express from 'express';
 import cors from 'cors';
 import { startDataCollection, getGameHistory, analyzeAndSaveSuggestion } from './services/aiService.js';
 import supabase from './config/supabase.js';
-import './types/express/index.d.ts'; // Importa a nossa extensão de tipos
 
 const app = express();
 const PORT = 3000;
@@ -23,11 +22,11 @@ const getUserIdFromAuth = async (req: express.Request, res: express.Response, ne
     const { data, error } = await supabase.auth.getUser(token);
 
     if (error) {
-        console.error('Erro de autenticação:', error.message);
         return res.status(401).json({ error: 'Token de autenticação inválido.' });
     }
 
-    req.user_id = data.user.id;
+    // A CORREÇÃO ESTÁ AQUI: Usamos a "assertion" para garantir que user_id existe
+    (req as any).user_id = data.user.id;
     next();
 };
 
@@ -44,21 +43,20 @@ app.get('/api/game-history', async (req, res) => {
     }
 });
 
-// Endpoint protegido para buscar dados do usuário e disparar a análise da IA
+// Endpoint protegido para analisar a IA e buscar métricas do usuário
 app.get('/api/user-data', getUserIdFromAuth, async (req, res) => {
     try {
-        const user_id = req.user_id;
+        // A CORREÇÃO ESTÁ AQUI: Usamos a "assertion" para garantir que user_id existe
+        const user_id = (req as any).user_id;
 
-        // Dispara a análise da IA para o usuário logado e salva a sugestão
-        await analyzeAndSaveSuggestion(null, user_id!);
+        await analyzeAndSaveSuggestion(null, user_id);
 
-        // Busca a sugestão e as métricas específicas do usuário
         const { data: aiSuggestion } = await supabase.from('ai_suggestions').select('*').single();
         const { data: strategyMetrics } = await supabase.from('strategy_metrics').select('*').eq('user_id', user_id).order('activation_count', { ascending: false });
 
         res.status(200).json({
             suggestion: aiSuggestion,
-            metrics: strategyMetrics
+            metrics: strategyMetrics,
         });
     } catch (err) {
         console.error('Erro ao processar dados do usuário:', err);
@@ -66,10 +64,11 @@ app.get('/api/user-data', getUserIdFromAuth, async (req, res) => {
     }
 });
 
-// Endpoint protegido para criar uma nova estratégia personalizada
+// Endpoint para criar uma nova estratégia personalizada (protegido)
 app.post('/api/user-strategies', getUserIdFromAuth, async (req, res) => {
     try {
-        const user_id = req.user_id;
+        // A CORREÇÃO ESTÁ AQUI: Usamos a "assertion" para garantir que user_id existe
+        const user_id = (req as any).user_id;
         const { name, pattern } = req.body;
 
         const { error } = await supabase
