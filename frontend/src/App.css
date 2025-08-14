@@ -1,0 +1,308 @@
+/* ======== Reset ======== */
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: #f8fafc;
+}
+
+/* ======== Telas de carregamento e erro ======== */
+.loading-screen, .error-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.loading-screen {
+  color: #38bdf8;
+}
+
+.error-screen {
+  color: #ef4444;
+}
+
+/* ======== Estrutura principal ======== */
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+/* ======== Cabeçalho ======== */
+.App-header {
+  width: 100%;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.App-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #38bdf8;
+  margin: 0;
+}
+
+.logout-button {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #f87171, #dc2626);
+}
+
+/* ======== Layout ======== */
+main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 1400px;
+}
+
+/* ======== Card ======== */
+.card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  flex: 1 1 45%;
+  max-width: 600px;
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.35);
+}
+
+h2 {
+  color: #38bdf8;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+/* ======== Sugestão da IA ======== */
+.suggestion-section p {
+  margin: 5px 0;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+/* Bolinhas e seta */
+.last-games-ai {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  position: relative;
+}
+
+.last-games-ai::after {
+  content: '→';
+  color: #f0f0f0;
+  font-size: 1.5rem;
+  position: absolute;
+  bottom: -22px; /* um pouco abaixo das bolinhas */
+  left: 0; /* alinhada à primeira */
+  transform: translateX(4px); /* ajuste fino */
+}
+
+.game-bubble-small {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid #333;
+}
+
+/* ======== Histórico de Jogos ======== */
+.history-list-compact {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  gap: 12px;
+  justify-items: center;
+}
+
+.game-bubble-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.game-bubble {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.game-bubble:hover {
+  transform: scale(1.15);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+}
+
+.game-bubble-label {
+  font-size: 0.8rem;
+  color: #e2e8f0;
+}
+
+/* Cores bolinhas */
+.game-bubble.blue {
+  background: linear-gradient(145deg, #38bdf8, #0284c7);
+}
+
+.game-bubble.red {
+  background: linear-gradient(145deg, #ef4444, #b91c1c);
+}
+
+.game-bubble.orange {
+  background: linear-gradient(145deg, #f59e0b, #b45309);
+}
+
+/* ======== Tabela ======== */
+.metrics-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.metrics-table-container th,
+.metrics-table-container td {
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 10px;
+}
+
+.metrics-table-container th {
+  background-color: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  font-weight: bold;
+}
+
+.metrics-table-container tbody tr:nth-child(even) {
+  background-color: rgba(255,255,255,0.02);
+}
+
+.metrics-table-container tbody tr:hover {
+  background-color: rgba(255,255,255,0.05);
+}
+
+/* ======== Login ======== */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-form {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(8px);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-form h2 {
+  color: #38bdf8;
+  margin-bottom: 24px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: none;
+  background-color: rgba(255,255,255,0.05);
+  color: #f8fafc;
+  border-radius: 6px;
+}
+
+.login-form button {
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+  color: #0f172a;
+  transition: all 0.3s ease;
+}
+
+.login-form button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(90deg, #0ea5e9, #0284c7);
+}
+
+.forgot-password-link {
+  cursor: pointer;
+  text-decoration: underline;
+  color: #38bdf8;
+  font-size: 0.9rem;
+}
+
+.back-button {
+  background: none !important;
+  border: none !important;
+  color: #38bdf8;
+  text-decoration: underline;
+}
+
+/* ======== Responsividade ======== */
+@media (max-width: 768px) {
+  .App-header h1 {
+    font-size: 1.8rem;
+  }
+  main {
+    flex-direction: column;
+    align-items: center;
+  }
+  .card {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+  .last-games-ai::after {
+    bottom: -20px;
+    transform: translateX(0);
+  }
+}
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px; /* altura fixa */
+}
