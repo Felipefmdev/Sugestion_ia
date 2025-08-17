@@ -67,17 +67,16 @@ app.get('/api/user-data', getUserIdFromAuth, async (req, res) => {
 // Endpoint para criar uma nova estratégia personalizada (protegido)
 app.post('/api/user-strategies', getUserIdFromAuth, async (req, res) => {
     try {
-        // A CORREÇÃO ESTÁ AQUI: Usamos a "assertion" para garantir que user_id existe
         const user_id = (req as any).user_id;
         const { name, pattern } = req.body;
 
         const { error } = await supabase
             .from('user_strategies')
-            .insert([{ user_id, name, pattern, suggestion: 'TBD' }]);
+            .insert([{ user_id, name, pattern }]); // Removido 'suggestion: "TBD"'
 
         if (error) throw error;
         res.status(201).json({ message: 'Estratégia salva com sucesso!' });
-    } catch (err) {
+    } catch (err: any) {
         console.error('Erro ao salvar a estratégia:', err);
         res.status(500).json({ error: 'Erro ao salvar a estratégia.' });
     }

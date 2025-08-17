@@ -31,8 +31,8 @@ const StrategyMetricsTable: React.FC<StrategyMetricsTableProps> = ({ metrics }) 
         aValue = a.strategy_name;
         bValue = b.strategy_name;
       } else {
-        aValue = a[sortKey];
-        bValue = b[sortKey];
+        aValue = a[sortKey as 'activation_count' | 'success_count'];
+        bValue = b[sortKey as 'activation_count' | 'success_count'];
       }
 
       if (typeof aValue === 'string' && typeof bValue === 'string') {
@@ -64,7 +64,7 @@ const StrategyMetricsTable: React.FC<StrategyMetricsTableProps> = ({ metrics }) 
   };
 
   if (metrics.length === 0) {
-    return <div className="metrics-table-container">Nenhuma estratégia foi ativada ainda.</div>;
+    return <div className="metrics-table-container card">Nenhuma estratégia foi ativada ainda.</div>;
   }
   
   return (

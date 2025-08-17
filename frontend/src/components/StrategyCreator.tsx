@@ -11,16 +11,17 @@ const colors = [
 ];
 
 interface StrategyCreatorProps {
+  onStrategySaved: () => void;
   session: any;
 }
 
-const StrategyCreator: React.FC<StrategyCreatorProps> = ({ session }) => {
+const StrategyCreator: React.FC<StrategyCreatorProps> = ({ onStrategySaved, session }) => {
   const [name, setName] = useState('');
   const [pattern, setPattern] = useState<string[]>([]);
   const [message, setMessage] = useState('');
 
   const handleAddColor = (color: string) => {
-    if (pattern.length < 8) { // Limite de 8 bolinhas
+    if (pattern.length < 8) {
       setPattern(prev => [...prev, color]);
     }
   };
@@ -41,6 +42,7 @@ const StrategyCreator: React.FC<StrategyCreatorProps> = ({ session }) => {
       setMessage('Estratégia salva com sucesso!');
       setName('');
       setPattern([]);
+      onStrategySaved();
     } catch (err: any) {
       setMessage(`Erro ao salvar: ${err.message}`);
       console.error(err);

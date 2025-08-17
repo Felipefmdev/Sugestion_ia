@@ -73,28 +73,28 @@ const AppContent: React.FC<{ session: Session }> = ({ session }) => {
   const bankerWins = history.filter(game => game.outcome === 'BankerWon').length;
   const ties = history.filter(game => game.outcome === 'Tie').length;
   
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = session.access_token;
-        const headers = { Authorization: `Bearer ${token}` };
+  const fetchData = async () => {
+    try {
+      const token = session.access_token;
+      const headers = { Authorization: `Bearer ${token}` };
 
-        const [userDataResponse, historyResponse] = await Promise.all([
-          axios.get('http://localhost:3000/api/user-data', { headers }),
-          axios.get<GameHistory[]>('http://localhost:3000/api/game-history')
-        ]);
-        
-        setSuggestion(userDataResponse.data.suggestion);
-        setMetrics(userDataResponse.data.metrics);
-        setHistory(historyResponse.data);
-      } catch (err) {
-        console.error("Erro ao buscar dados do backend:", err);
-        setError("Não foi possível conectar ao backend ou buscar os dados.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    
+      const [userDataResponse, historyResponse] = await Promise.all([
+        axios.get('http://localhost:3000/api/user-data', { headers }),
+        axios.get<GameHistory[]>('http://localhost:3000/api/game-history')
+      ]);
+      
+      setSuggestion(userDataResponse.data.suggestion);
+      setMetrics(userDataResponse.data.metrics);
+      setHistory(historyResponse.data);
+    } catch (err) {
+      console.error("Erro ao buscar dados do backend:", err);
+      setError("Não foi possível conectar ao backend ou buscar os dados.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
     const intervalId = setInterval(fetchData, 5000);
     return () => clearInterval(intervalId);
@@ -159,15 +159,6 @@ const AppContent: React.FC<{ session: Session }> = ({ session }) => {
                     <ResultsChart playerWins={playerWins} bankerWins={bankerWins} ties={ties} />
                 </div>
             </section>
-        </div>
-        
-        <div className="dashboard-right">
-            <section className="strategy-creator-card card">
-                <StrategyCreator session={session} />
-            </section>
-            <section className="metrics-section card">
-                <StrategyMetricsTable metrics={metrics} />
-            </section>
             <section className="history-section card">
                 <h2>Últimos Jogos</h2>
                 <div className="history-list-compact">
@@ -180,6 +171,15 @@ const AppContent: React.FC<{ session: Session }> = ({ session }) => {
                         </div>
                     ))}
                 </div>
+            </section>
+        </div>
+        
+        <div className="dashboard-right">
+            <section className="strategy-creator-card card">
+                <StrategyCreator onStrategySaved={fetchData} session={session} />
+            </section>
+            <section className="metrics-section card">
+                <StrategyMetricsTable metrics={metrics} />
             </section>
         </div>
       </main>

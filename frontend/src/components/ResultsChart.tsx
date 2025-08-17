@@ -1,10 +1,9 @@
-// src/ResultsChart.tsx
+// src/components/ResultsChart.tsx
 
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
-// Registra os elementos que o Chart.js precisa para o Doughnut Chart
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface ResultsChartProps {
@@ -31,19 +30,12 @@ const ResultsChart: React.FC<ResultsChartProps> = ({ playerWins, bankerWins, tie
     maintainAspectRatio: true,
     plugins: {
       legend: {
-        position: 'right' as const,
-        align: 'end',
+        position: 'top' as const,
+        align: 'center' as const, // Corrigimos o alinhamento para um valor aceitável
         labels: {
-          boxWidth: 20,
-          padding: 15,
           color: '#f0f0f0',
         },
       },
-      layout: {
-        padding: {
-            right: 40 // espaço para legenda
-        }
-    },
       title: {
         display: true,
         text: 'Frequência de Resultados',
